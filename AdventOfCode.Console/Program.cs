@@ -1,4 +1,10 @@
-﻿using System.Text;
+﻿/*
+ * Advent of Code 2020
+ * Author: Nick Martin
+ * GitHub Repo: https://github.com/nickmartin1ee7/advent-of-code
+ */
+
+using System.Text;
 using static System.Console;
 
 namespace AdventOfCode.Console
