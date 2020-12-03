@@ -8,7 +8,7 @@ namespace AdventOfCode.Library.Day2
     {
         public override string SilverStar()
         {
-            var rawData = File.ReadLines($"{GetType().Name}\\data.txt");
+           var rawData = File.ReadLines(Path.Combine($"{GetType().Name}","data.txt"));
 
             var data = ProcessSilverStarData(rawData);
 
@@ -19,7 +19,7 @@ namespace AdventOfCode.Library.Day2
 
         public override string GoldStar()
         {
-            var rawData = File.ReadLines($"{GetType().Name}\\data.txt");
+           var rawData = File.ReadLines(Path.Combine($"{GetType().Name}","data.txt"));
 
             var data = ProcessGoldStarData(rawData);
 
