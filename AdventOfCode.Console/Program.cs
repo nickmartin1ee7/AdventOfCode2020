@@ -4,6 +4,10 @@
  * GitHub Repo: https://github.com/nickmartin1ee7/AdventOfCode2020
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using static System.Console;
 
@@ -13,19 +17,30 @@ namespace AdventOfCode.Console
     {
         public static void Main()
         {
-            WriteLine(RunAllSolutions());
+            WriteLine(PrintAllSolutions());
             ReadKey();
         }
 
-        private static string RunAllSolutions()
+        private static string PrintAllSolutions()
         {
             var sb = new StringBuilder();
 
-            sb.Append(new Day1());
-            sb.Append(new Day2());
-            sb.Append(new Day3());
+            foreach (var r in RunAllSolutions())
+            {
+                sb.Append(r);
+            }
 
             return sb.ToString();
         }
+
+        private static IEnumerable<string> RunAllSolutions() =>
+            ReflectEverySolutionType().Select(type => Activator.CreateInstance(type).ToString());
+
+        private static IEnumerable<Type> ReflectEverySolutionType() =>
+            AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
+                .Where(x => typeof(ISolution)
+                                .IsAssignableFrom(x) &&
+                            !x.IsInterface &&
+                            !x.IsAbstract);
     }
 }
