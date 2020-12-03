@@ -34,7 +34,7 @@ namespace AdventOfCode.Console
         }
 
         private static IEnumerable<string> RunAllSolutions() =>
-            ReflectEverySolutionType().Select(type => Activator.CreateInstance(type).ToString());
+            ReflectEverySolutionType().Select(type => Activator.CreateInstance(type)?.ToString());
 
         private static IEnumerable<Type> ReflectEverySolutionType() =>
             AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
