@@ -1,7 +1,7 @@
 ﻿/*
  * Advent of Code 2020
  * Author: Nick Martin
- * GitHub Repo: https://github.com/nickmartin1ee7/advent-of-code
+ * GitHub Repo: https://github.com/nickmartin1ee7/AdventOfCode2020
  */
 
 using System.Text;
@@ -14,6 +14,7 @@ namespace AdventOfCode.Console
         public static void Main()
         {
             WriteLine(RunAllSolutions());
+            ReadKey();
         }
 
         private static string RunAllSolutions()
