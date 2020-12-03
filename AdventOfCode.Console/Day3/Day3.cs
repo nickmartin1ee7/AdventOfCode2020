@@ -62,7 +62,6 @@ namespace AdventOfCode.Console
         internal int GetCollisions(int right, int down)
         {
             int collisions = 0;
-
             int xPos = 0;
 
             for (int yPos = down; yPos < _instance.Length; yPos += down)

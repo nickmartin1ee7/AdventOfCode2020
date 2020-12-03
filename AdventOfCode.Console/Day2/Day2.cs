@@ -28,37 +28,37 @@ namespace AdventOfCode.Console
             return $"{goldResult}";
         }
 
-        private static List<IInput> ProcessSilverStarData(IEnumerable<string> rawData)
+        private static List<IUserInput> ProcessSilverStarData(IEnumerable<string> rawData)
         {
-            var inputs = new List<IInput>();
+            var inputs = new List<IUserInput>();
 
             foreach (var line in rawData)
             {
                 var tempLine = line.Split(": ");
                 var policy = GeneratePolicy(tempLine[0]);
                 var password = tempLine[1];
-                inputs.Add(new InputPt1(policy, password));
+                inputs.Add(new UserUserInputSilver(policy, password));
             }
 
             return inputs;
         }
 
-        private static List<IInput> ProcessGoldStarData(IEnumerable<string> rawData)
+        private static List<IUserInput> ProcessGoldStarData(IEnumerable<string> rawData)
         {
-            var inputs = new List<IInput>();
+            var inputs = new List<IUserInput>();
 
             foreach (var line in rawData)
             {
                 var tempLine = line.Split(": ");
                 var policy = GeneratePolicy(tempLine[0]);
                 var password = tempLine[1];
-                inputs.Add(new InputPt2(policy, password));
+                inputs.Add(new UserUserInputGold(policy, password));
             }
 
             return inputs;
         }
 
-        private static string Solve(List<IInput> inputs)
+        private static string Solve(List<IUserInput> inputs)
         {
             return $"{inputs.Count(i => i.IsValid)}";
         }
@@ -78,7 +78,9 @@ namespace AdventOfCode.Console
         }
     }
 
-    internal class InputPt1 : IInput
+    #region Classes
+
+    internal class UserUserInputSilver : IUserInput
     {
         internal PasswordPolicy PasswordPolicy { get; }
         internal string Password { get; }
@@ -97,14 +99,14 @@ namespace AdventOfCode.Console
             }
         }
 
-        internal InputPt1(PasswordPolicy policy, string password)
+        internal UserUserInputSilver(PasswordPolicy policy, string password)
         {
             PasswordPolicy = policy;
             Password = password;
         }
     }
 
-    internal class InputPt2 : IInput
+    internal class UserUserInputGold : IUserInput
     {
         internal PasswordPolicy PasswordPolicy { get; }
         internal string Password { get; }
@@ -125,7 +127,7 @@ namespace AdventOfCode.Console
             }
         }
 
-        internal InputPt2(PasswordPolicy policy, string password)
+        internal UserUserInputGold(PasswordPolicy policy, string password)
         {
             PasswordPolicy = policy;
             Password = password;
@@ -146,8 +148,10 @@ namespace AdventOfCode.Console
         }
     }
 
-    internal interface IInput
+    internal interface IUserInput
     {
         public bool IsValid { get; }
     }
+
+    #endregion
 }
