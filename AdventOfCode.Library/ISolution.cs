@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Console
+﻿namespace AdventOfCode.Library
 {
     public interface ISolution
     {

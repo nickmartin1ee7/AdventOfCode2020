@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace AdventOfCode.Console
+namespace AdventOfCode.Library.Day2
 {
     public class Day2 : BaseSolution
     {
@@ -150,7 +150,7 @@ namespace AdventOfCode.Console
 
     internal interface IUserInput
     {
-        public bool IsValid { get; }
+        bool IsValid { get; }
     }
 
     #endregion

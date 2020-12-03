@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace AdventOfCode.Console
+namespace AdventOfCode.Library.Day3
 {
     public class Day3 : BaseSolution
     {

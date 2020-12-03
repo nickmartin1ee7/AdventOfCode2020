@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace AdventOfCode.Console
+namespace AdventOfCode.Library.Day1
 {
     public class Day1 : BaseSolution
     {

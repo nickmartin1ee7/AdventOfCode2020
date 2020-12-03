@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace AdventOfCode.Console
+namespace AdventOfCode.Library
 {
     public abstract class BaseSolution : ISolution
     {

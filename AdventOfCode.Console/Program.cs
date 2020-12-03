@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using AdventOfCode.Library;
 using static System.Console;
 
 namespace AdventOfCode.Console
@@ -34,13 +35,6 @@ namespace AdventOfCode.Console
         }
 
         private static IEnumerable<string> RunAllSolutions() =>
-            ReflectEverySolutionType().Select(type => Activator.CreateInstance(type)?.ToString());
-
-        private static IEnumerable<Type> ReflectEverySolutionType() =>
-            AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                .Where(x => typeof(ISolution)
-                                .IsAssignableFrom(x) &&
-                            !x.IsInterface &&
-                            !x.IsAbstract);
+            SolutionReflector.ReflectEverySolutionType().Select(type => Activator.CreateInstance(type)?.ToString());
     }
 }

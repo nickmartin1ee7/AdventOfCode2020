@@ -6,15 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Day1\data.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Day2\data.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Day3\data.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\AdventOfCode.Library\AdventOfCode.Library.csproj" />
   </ItemGroup>
 
 </Project>
