@@ -14,13 +14,13 @@ namespace AdventOfCode.Tests
             _solution = new Day3();
         }
 
-        [TestCase("")]
+        [TestCase("202")]
         public void SilverStarTest(string expected)
         {
             Assert.IsTrue(_solution.SilverStar().Contains(expected));
         }
 
-        [TestCase("")]
+        [TestCase("151")]
         public void GoldStarTest(string expected)
         {
             Assert.IsTrue(_solution.GoldStar().Contains(expected));
