@@ -17,13 +17,13 @@ namespace AdventOfCode.Tests
         [TestCase("240")]
         public void SilverStarTest(string expected)
         {
-            Assert.IsTrue(_solution.SilverStar().Contains(expected));
+            Assert.AreEqual(expected, _solution.SilverStar());
         }
 
         [TestCase("2832009600")]
         public void GoldStarTest(string expected)
         {
-            Assert.IsTrue(_solution.GoldStar().Contains(expected));
+            Assert.AreEqual(expected, _solution.GoldStar());
         }
     }
 }

@@ -17,16 +17,16 @@ namespace AdventOfCode.Library.Day4
         
         public override string SilverStar()
         {
-            var data = ProcessData('S', _rawData);
+            var data = ProcessData(StarType.Silver, _rawData);
 
             string silverResult = Solve(data);
 
-            return $"{silverResult }";
+            return $"{silverResult}";
         }
 
         public override string GoldStar()
         {
-            var data = ProcessData('G', _rawData);
+            var data = ProcessData(StarType.Gold, _rawData);
 
             string goldResult = Solve(data);
 
@@ -35,17 +35,22 @@ namespace AdventOfCode.Library.Day4
         
         #region Methods
 
-        private List<Passport> ProcessData(char starType, string rawData)
+        private IEnumerable<Passport> ProcessData(StarType starType, string rawData)
         {
             var passports = new List<Passport>();
             var splitData = rawData.Split($"{Environment.NewLine}{Environment.NewLine}");
             
             foreach (var entity in splitData)
             {
-                if (starType == 'S')
-                    passports.Add(ParseSilverPassports(entity));
-                else if (starType == 'G')
-                    passports.Add(ParseGoldPassports(entity));                
+                switch (starType)
+                {
+                    case StarType.Silver:
+                        passports.Add(ParseSilverPassport(entity));
+                        break;
+                    case StarType.Gold:
+                        passports.Add(ParseGoldPassport(entity));
+                        break;
+                }
             }
             
             return passports;
@@ -54,9 +59,9 @@ namespace AdventOfCode.Library.Day4
         private string Solve(IEnumerable<Passport> data) =>
             $"{data.Count(p => p.Validate())}";
 
-        private Passport ParseSilverPassports(string entity)
+        public static Passport ParseSilverPassport(string entity)
         {
-            Passport passport = new Passport();
+            var passport = new Passport();
             var temp = entity.Split(new char[] { ' ', '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (var item in temp)
@@ -110,66 +115,66 @@ namespace AdventOfCode.Library.Day4
             return passport;
         }
         
-        private Passport ParseGoldPassports(string entity)
+        public static Passport ParseGoldPassport(string entity)
         {
-            Passport passport = new Passport();
+            var passport = new Passport();
             var temp = entity.Split(new char[] { ' ', '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (var item in temp)
             {
-                if (item.Contains("byr:"))
+                if (item.Contains("byr:"))    // Must be at or between 1920-2002
                 {
                     var t = short.Parse(item.Split(':')[1]);
-                    if (t >= 1902 || t <= 2002)
+                    if (t >= 1920 && t <= 2002)
                         passport.BirthYear = t;
                 }
-                else if (item.Contains("iyr:"))
+                else if (item.Contains("iyr:"))    // Must be at or between 2010-2020
                 {
                     var t = short.Parse(item.Split(':')[1]);
-                    if (t >= 2010 || t <= 2020)
+                    if (t >= 2010 && t <= 2020)
                         passport.IssueYear = t;
                 }
-                else if (item.Contains("eyr:"))
+                else if (item.Contains("eyr:"))    // Must be at or between 2020-2030
                 {
                     var t = short.Parse(item.Split(':')[1]);
-                    if (t >= 2020 || t <= 2030)
+                    if (t >= 2020 && t <= 2030)
                         passport.ExpirationYear = t;
                 }
-                else if (item.Contains("hgt:"))
+                else if (item.Contains("hgt:"))    // Must end in cm or in, and be within a se tof ranges
                 {
                     var t = item.Split(':')[1];
                     if (t.EndsWith("cm"))
                     {
                         var h = short.Parse(t.Split("cm")[0]);
-                        if (h >= 150 || h <= 193)
+                        if (h >= 150 && h <= 193)
                             passport.Height = t;
                     }
                     else if (t.EndsWith("in"))
                     {
                         var h = short.Parse(t.Split("in")[0]);
-                        if (h >= 59 || h <= 76)
+                        if (h >= 59 && h <= 76)
                             passport.Height = t;
                     }
                 }
-                else if (item.Contains("hcl:"))
+                else if (item.Contains("hcl:"))    // Must be #029abf
                 {
                     var t = item.Split(':')[1];
-                    if (Regex.IsMatch(t, @"#\w{6}"))
+                    if (Regex.Match(t, @"#[0-9a-f]{6}").Value.Equals(t))
                         passport.HairColor = t;
                 }
-                else if (item.Contains("ecl:"))
+                else if (item.Contains("ecl:"))    // Must be an enum specified
                 {
                     var t = item.Split(':')[1];
                     if (Enum.TryParse(typeof(Color), t, out _))
                         passport.EyeColor = t;
                 }
-                else if (item.Contains("pid:"))
+                else if (item.Contains("pid:"))    // Must be 9 digits
                 {
                     var t = item.Split(':')[1];
-                    if (Regex.IsMatch($"{t}", @"\d{9}"))
+                    if (Regex.Match($"{t}", @"\d{9}").Value.Equals(t))
                         passport.PassportId = t;
                 }
-                else if (item.Contains("cid:"))
+                else if (item.Contains("cid:"))    // Optional
                 {
                     var t = short.Parse(item.Split(':')[1]);
                     passport.CountryId = t;
@@ -179,7 +184,6 @@ namespace AdventOfCode.Library.Day4
                     throw new InvalidDataException($"Data entry was invalid: {item}");
                 }
             }
-
             return passport;
         }
         
@@ -188,7 +192,7 @@ namespace AdventOfCode.Library.Day4
 
     #region Classes
 
-    internal class Passport
+    public class Passport
     {
         public short? BirthYear { get; set; }
         public short? IssueYear { get; set; }
@@ -209,6 +213,12 @@ namespace AdventOfCode.Library.Day4
             });
     }
 
+    internal enum StarType
+    {
+        Silver,
+        Gold
+    }
+    
     internal enum Color
     {
         amb,
