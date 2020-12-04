@@ -12,6 +12,7 @@ namespace AdventOfCode.Library
                 .Where(x => typeof(ISolution)
                                 .IsAssignableFrom(x) &&
                             !x.IsInterface &&
-                            !x.IsAbstract);
+                            !x.IsAbstract)
+                .OrderBy(x => x.Name);
     }
 }
