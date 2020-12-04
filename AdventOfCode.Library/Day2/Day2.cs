@@ -6,11 +6,16 @@ namespace AdventOfCode.Library.Day2
 {
     public class Day2 : BaseSolution
     {
+        private IEnumerable<string> _rawData;
+
+        public Day2()
+        {
+            _rawData = File.ReadLines(Path.Combine($"{GetType().Name}", "data.txt"));
+        }
+        
         public override string SilverStar()
         {
-           var rawData = File.ReadLines(Path.Combine($"{GetType().Name}","data.txt"));
-
-            var data = ProcessSilverStarData(rawData);
+            var data = ProcessSilverStarData(_rawData);
 
             var silverResult = Solve(data);
 
@@ -19,9 +24,7 @@ namespace AdventOfCode.Library.Day2
 
         public override string GoldStar()
         {
-           var rawData = File.ReadLines(Path.Combine($"{GetType().Name}","data.txt"));
-
-            var data = ProcessGoldStarData(rawData);
+            var data = ProcessGoldStarData(_rawData);
 
             var goldResult = Solve(data);
 
