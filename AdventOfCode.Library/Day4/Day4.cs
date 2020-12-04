@@ -8,7 +8,7 @@ namespace AdventOfCode.Library.Day4
 {
     public class Day4 : BaseSolution
     {
-        private string _rawData;
+        private readonly string _rawData;
 
         public Day4()
         {
@@ -19,7 +19,7 @@ namespace AdventOfCode.Library.Day4
         {
             var data = ProcessData(StarType.Silver, _rawData);
 
-            string silverResult = Solve(data);
+            var silverResult = Solve(data);
 
             return $"{silverResult}";
         }
@@ -28,7 +28,7 @@ namespace AdventOfCode.Library.Day4
         {
             var data = ProcessData(StarType.Gold, _rawData);
 
-            string goldResult = Solve(data);
+            var goldResult = Solve(data);
 
             return $"{goldResult}";
         }
@@ -56,7 +56,7 @@ namespace AdventOfCode.Library.Day4
             return passports;
         }
         
-        private string Solve(IEnumerable<Passport> data) =>
+        private static string Solve(IEnumerable<Passport> data) =>
             $"{data.Count(p => p.Validate())}";
 
         public static Passport ParseSilverPassport(string entity)
