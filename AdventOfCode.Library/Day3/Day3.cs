@@ -6,7 +6,7 @@ namespace AdventOfCode.Library.Day3
 {
     public class Day3 : BaseSolution
     {
-        private readonly IEnumerable<string> _rawData;
+        private IEnumerable<string> _rawData;
 
         public Day3()
         {
@@ -17,7 +17,7 @@ namespace AdventOfCode.Library.Day3
         {
             var data = ProcessData(_rawData);
 
-            var silverResult = SolveSilverStar(data);
+            string silverResult = SolveSilverStar(data);
 
             return $"{silverResult }";
         }
@@ -26,13 +26,15 @@ namespace AdventOfCode.Library.Day3
         {
             var data = ProcessData(_rawData);
 
-            var goldResult = SolveGoldStar(data);
+            string goldResult = SolveGoldStar(data);
 
             return $"{goldResult}";
         }
 
-        private Map ProcessData(IEnumerable<string> rawData) =>
-            new Map(rawData.ToArray());
+        private Map ProcessData(IEnumerable<string> rawData)
+        {
+            return new Map(rawData.ToArray());
+        }
 
         private string SolveSilverStar(Map data) =>
             $"{data.GetCollisions(3, 1)}";
@@ -62,19 +64,19 @@ namespace AdventOfCode.Library.Day3
 
         internal int GetCollisions(int right, int down)
         {
-            var collisions = 0;
-            var xPos = 0;
+            int collisions = 0;
+            int xPos = 0;
 
-            for (int yPos = _instance.Length - 1; yPos >= down; yPos -= down)
+            for (int yPos = down; yPos < _instance.Length; yPos += down)
             {
                 xPos += right;
 
-                var maxLength = _instance[yPos].Length;
+                int maxLength = _instance[yPos].Length;
 
                 if (xPos >= maxLength)
                     xPos -= maxLength;
 
-                var geography = _instance[yPos][xPos];
+                char geography = _instance[yPos][xPos];
 
                 if (geography == '#')
                     collisions++;

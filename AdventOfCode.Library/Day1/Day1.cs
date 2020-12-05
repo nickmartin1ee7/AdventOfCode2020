@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace AdventOfCode.Library.Day1
 {
     public class Day1 : BaseSolution
     {
-        private readonly IEnumerable<string> _rawData;
+        private IEnumerable<string> _rawData;
 
         public Day1()
         {
@@ -31,12 +30,17 @@ namespace AdventOfCode.Library.Day1
             return $"{goldResult}";
         }
 
-        private static List<int> ProcessData(IEnumerable<string> rawData) =>
-            rawData
-                .Select(int.Parse)
-                .ToList();
+        private List<int> ProcessData(IEnumerable<string> rawData)
+        {
+            var numbers = new List<int>();
 
-        private static int SolveSilverStar(IReadOnlyCollection<int> data, int sum)
+            foreach (var line in rawData)
+                numbers.Add(int.Parse(line));
+
+            return numbers;
+        }
+
+        private int SolveSilverStar(List<int> data, int sum)
         {
             foreach (var x in data)
             {
@@ -50,7 +54,7 @@ namespace AdventOfCode.Library.Day1
             return -1;
         }
 
-        private static int SolveGoldStar(IReadOnlyCollection<int> data, int sum)
+        private int SolveGoldStar(List<int> data, int sum)
         {
             foreach (var x in data)
             {

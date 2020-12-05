@@ -6,7 +6,7 @@ namespace AdventOfCode.Library.Day2
 {
     public class Day2 : BaseSolution
     {
-        private readonly IEnumerable<string> _rawData;
+        private IEnumerable<string> _rawData;
 
         public Day2()
         {
@@ -31,29 +31,35 @@ namespace AdventOfCode.Library.Day2
             return $"{goldResult}";
         }
 
-        private static List<IUserInput> ProcessSilverStarData(IEnumerable<string> rawData) =>
-            (from line
-                    in rawData
-                select line
-                    .Split(": ")
-                into tempLine
-                let policy = GeneratePolicy(tempLine[0])
-                let password = tempLine[1]
-                select new UserUserInputSilver(policy, password))
-                .Cast<IUserInput>()
-                .ToList();
+        private static List<IUserInput> ProcessSilverStarData(IEnumerable<string> rawData)
+        {
+            var inputs = new List<IUserInput>();
 
-        private static List<IUserInput> ProcessGoldStarData(IEnumerable<string> rawData) =>
-            (from line
-                    in rawData
-                select line
-                    .Split(": ")
-                into tempLine
-                let policy = GeneratePolicy(tempLine[0])
-                let password = tempLine[1]
-                select new UserUserInputGold(policy, password))
-            .Cast<IUserInput>()
-            .ToList();
+            foreach (var line in rawData)
+            {
+                var tempLine = line.Split(": ");
+                var policy = GeneratePolicy(tempLine[0]);
+                var password = tempLine[1];
+                inputs.Add(new UserUserInputSilver(policy, password));
+            }
+
+            return inputs;
+        }
+
+        private static List<IUserInput> ProcessGoldStarData(IEnumerable<string> rawData)
+        {
+            var inputs = new List<IUserInput>();
+
+            foreach (var line in rawData)
+            {
+                var tempLine = line.Split(": ");
+                var policy = GeneratePolicy(tempLine[0]);
+                var password = tempLine[1];
+                inputs.Add(new UserUserInputGold(policy, password));
+            }
+
+            return inputs;
+        }
 
         private static string Solve(List<IUserInput> inputs)
         {
@@ -62,10 +68,14 @@ namespace AdventOfCode.Library.Day2
 
         private static PasswordPolicy GeneratePolicy(string s)
         {
+            int max;
+            int min;
+            char c;
+
             var temp = s.Split('-');
-            var max = int.Parse(temp[1].Split(' ')[0]);
-            var min = int.Parse(temp[0]);
-            var c = char.Parse(s.Split(' ')[1]);
+            max = int.Parse(temp[1].Split(' ')[0]);
+            min = int.Parse(temp[0]);
+            c = char.Parse(s.Split(' ')[1]);
 
             return new PasswordPolicy(max, min, c);
         }
@@ -75,65 +85,68 @@ namespace AdventOfCode.Library.Day2
 
     internal class UserUserInputSilver : IUserInput
     {
-        private PasswordPolicy _passwordPolicy { get; }
-        private string _password { get; }
+        internal PasswordPolicy PasswordPolicy { get; }
+        internal string Password { get; }
 
         public bool IsValid
         {
             get
             {
-                var count = _password.Count(c => c == _passwordPolicy.PolicyCharacter);
+                int count = Password.Count(c => c == PasswordPolicy.PolicyCharacter);
 
-                return count >= _passwordPolicy.Minimum &&
-                       count <= _passwordPolicy.Maximum;
+                if (count >= PasswordPolicy.Miniumum &&
+                    count <= PasswordPolicy.Maxiumum)
+                    return true;
+
+                return false;
             }
         }
 
         internal UserUserInputSilver(PasswordPolicy policy, string password)
         {
-            _passwordPolicy = policy;
-            _password = password;
+            PasswordPolicy = policy;
+            Password = password;
         }
     }
 
     internal class UserUserInputGold : IUserInput
     {
-        private PasswordPolicy _passwordPolicy { get; }
-        private string _password { get; }
+        internal PasswordPolicy PasswordPolicy { get; }
+        internal string Password { get; }
 
         public bool IsValid
         {
             get
             {
-                var occurrences = 0;
+                int occurances = 0;
 
-                if (_password[_passwordPolicy.Minimum - 1] == _passwordPolicy.PolicyCharacter)
-                    occurrences++;
+                if (Password[PasswordPolicy.Miniumum - 1] == PasswordPolicy.PolicyCharacter)
+                    occurances++;
 
-                if (_password[_passwordPolicy.Maximum - 1] == _passwordPolicy.PolicyCharacter)
-                    occurrences++;
+                if (Password[PasswordPolicy.Maxiumum - 1] == PasswordPolicy.PolicyCharacter)
+                    occurances++;
 
-                return occurrences == 1;
+                return occurances == 1;
             }
         }
 
         internal UserUserInputGold(PasswordPolicy policy, string password)
         {
-            _passwordPolicy = policy;
-            _password = password;
+            PasswordPolicy = policy;
+            Password = password;
         }
     }      
 
     internal class PasswordPolicy
     {
-        internal int Maximum { get; }
-        internal int Minimum { get; }
+        internal int Maxiumum { get; }
+        internal int Miniumum { get; }
         internal char PolicyCharacter { get; }
 
-        internal PasswordPolicy(int maximum, int minimum, char policyCharacter)
+        internal PasswordPolicy(int maxiumum, int miniumum, char policyCharacter)
         {
-            Maximum = maximum;
-            Minimum = minimum;
+            Maxiumum = maxiumum;
+            Miniumum = miniumum;
             PolicyCharacter = policyCharacter;
         }
     }
