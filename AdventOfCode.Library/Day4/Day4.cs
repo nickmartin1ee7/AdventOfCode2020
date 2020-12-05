@@ -140,7 +140,7 @@ namespace AdventOfCode.Library.Day4
                     if (t >= 2020 && t <= 2030)
                         passport.ExpirationYear = t;
                 }
-                else if (item.Contains("hgt:"))    // Must end in cm or in, and be within a se tof ranges
+                else if (item.Contains("hgt:"))    // Must end in cm or in, and be within a set of ranges
                 {
                     var t = item.Split(':')[1];
                     if (t.EndsWith("cm"))
