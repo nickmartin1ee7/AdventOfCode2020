@@ -10,7 +10,7 @@ namespace AdventOfCode.Library.Day2
 
         public Day2()
         {
-            _rawData = File.ReadLines(Path.Combine($"{GetType().Name}", "data.txt"));
+            _rawData = ReadLines(GetType());
         }
         
         public override string SilverStar()

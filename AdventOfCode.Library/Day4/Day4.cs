@@ -12,7 +12,7 @@ namespace AdventOfCode.Library.Day4
 
         public Day4()
         {
-            _rawData = File.ReadAllText(Path.Combine($"{GetType().Name}", "data.txt"));
+            _rawData = ReadAllText(GetType());
         }
         
         public override string SilverStar()
