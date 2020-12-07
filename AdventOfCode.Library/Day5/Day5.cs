@@ -94,11 +94,6 @@ namespace AdventOfCode.Library.Day5
             Seat = new Seat(row, column);
         }
 
-        /// <summary>
-        /// 0 is the front.
-        /// </summary>
-        /// <param name="rowCode"></param>
-        /// <returns></returns>
         private int ParseRows(string rowCode) // 7 in length
         {
             var upper = _plane.Rows - 1;

@@ -35,7 +35,9 @@ namespace AdventOfCode.Tests
             var expectedSeat = new Seat(row, column);
             var plane = new Plane(128,8);
             var boardingPass = plane.ScanBoardingCodeToBoardingPass(boardingCode);
-            Assert.AreEqual(expectedSeat.SeatId, boardingPass.Seat.SeatId);
+            Assert.AreEqual(expectedSeat.Row, boardingPass.Seat.Row, $"Row was {boardingPass.Seat.Row} instead of {expectedSeat.Row}");
+            Assert.AreEqual(expectedSeat.Column, boardingPass.Seat.Column, $"Column was {boardingPass.Seat.Column} instead of {expectedSeat.Column}");
+            Assert.AreEqual(expectedSeat.SeatId, boardingPass.Seat.SeatId, $"SeatId was {boardingPass.Seat.SeatId} instead of {expectedSeat.SeatId}");
         }
     }
 }
