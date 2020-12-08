@@ -43,20 +43,20 @@ namespace AdventOfCode.Library.Day6
 
     public class Group
     {
-        private readonly string[] _data;
+        private readonly int _groupMembers;
 
         public Dictionary<char, List<bool>> Answers { get; } = new Dictionary<char, List<bool>>();
         
         public int InAgreementQuestions
         {
-            get => Answers.Values.Count(answers => answers.Count(a => a) == _data.Length);
+            get => Answers.Values.Count(answers => answers.Count(a => a) == _groupMembers);
         }
 
-        public Group(string[] data)
+        public Group(IReadOnlyCollection<string> data)
         {
-            _data = data;
+            _groupMembers = data.Count;
 
-            foreach (var person in _data)
+            foreach (var person in data)
             {
                 foreach (var question in person)
                 {
