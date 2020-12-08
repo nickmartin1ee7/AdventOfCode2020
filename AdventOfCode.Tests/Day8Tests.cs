@@ -1,17 +1,17 @@
 ﻿using AdventOfCode.Library;
-using AdventOfCode.Library.Day7;
+using AdventOfCode.Library.Day8;
 using NUnit.Framework;
 
 namespace AdventOfCode.Tests
 {
-    public class Day7Tests
+    public class Day8Tests
     {
         private ISolution _solution;
 
         [SetUp]
         public void Setup()
         {
-            _solution = new Day7();
+            _solution = new Day8();
         }
 
         [TestCase("")]
