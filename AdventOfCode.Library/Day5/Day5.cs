@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AdventOfCode.Library.Day5
 {
@@ -32,7 +33,7 @@ namespace AdventOfCode.Library.Day5
         {
             foreach (var line in _rawData)
             {
-
+                throw new NotImplementedException();
             }
 
             return $"";
