@@ -15,8 +15,8 @@ namespace AdventOfCode.Library.Day8
 
         public override string SilverStar()
         {
-            var lmc = new Computer(_rawData);
-            lmc.RunProgram();
+            var lmc = new Computer();
+            lmc.RunProgram(_rawData);
             return $"{lmc.Accumulator}";
         }
 
@@ -34,24 +34,19 @@ namespace AdventOfCode.Library.Day8
 
         public int Accumulator { get; set; }
 
-        public Computer(IEnumerable<string> programData)
+        public void RunProgram(IEnumerable<string> programData)
         {
-            var data = programData.ToList();
-            for (int i = 0; i < data.Count; i++)
-            {
-                _programInstructions.Add(i, new Instruction(data[i]));
-            }
+            ProcessProgramData(programData);
+            ExecuteProgramInstructions();
         }
 
-        public void RunProgram()
+        private void ExecuteProgramInstructions()
         {
             do
             {
                 if (_programInstructions.TryGetValue(_ioc.InstructionPointer, out Instruction targetInstruction))
                 {
-                    if (_ioc.Next(targetInstruction))
-                        ExecuteInstruction();
-                    else
+                    if (!ExecuteInstruction(targetInstruction))
                         break;
                 }
                 else
@@ -61,20 +56,41 @@ namespace AdventOfCode.Library.Day8
             } while (_ioc.InstructionPointer < _programInstructions.Count);
         }
 
-        private void ExecuteInstruction()
+        private void ProcessProgramData(IEnumerable<string> programData)
         {
+            var data = programData.ToList();
+            for (int i = 0; i < data.Count; i++)
+            {
+                _programInstructions.Add(i, new Instruction(data[i]));
+            }
+        }
+
+        private bool ExecuteInstruction(Instruction instruction)
+        {
+            try
+            {
+                _ioc.CurrentInstruction = instruction;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
             switch (_ioc.CurrentInstruction.OpCode)
             {
                 case OPCODES.nop:
                     // Waste time
                     break;
                 case OPCODES.jmp:
-                    _ioc.InstructionPointer += _ioc.CurrentInstruction.Value;
+                    _ioc.InstructionPointer += _ioc.CurrentInstruction.Value - 1;
                     break;
                 case OPCODES.acc:
                     Accumulator += _ioc.CurrentInstruction.Value;
                     break;
             }
+
+            _ioc.InstructionPointer++;
+            return true;
         }
     }
 
@@ -86,7 +102,7 @@ namespace AdventOfCode.Library.Day8
         public Instruction CurrentInstruction
         {
             get => _currentInstruction;
-            private set
+            set
             {
                 _history.Add(value);
                 _currentInstruction = value;
@@ -95,21 +111,6 @@ namespace AdventOfCode.Library.Day8
         }
 
         public int InstructionPointer { get; set; }
-
-        public bool Next(Instruction nextInstruction)
-        {
-            InstructionPointer++;
-            try
-            {
-                CurrentInstruction = nextInstruction;
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return false;
-            }
-        }
 
         private void CheckForInfiniteLoop()
         {
