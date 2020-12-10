@@ -1,10 +1,10 @@
-﻿namespace AdventOfCode.Library.Day8
+﻿namespace AdventOfCode.Library.Day10
 {
-    public class Day8 : BaseSolution
+    public class Day10 : BaseSolution
     {
         private string _rawData;
 
-        public Day8()
+        public Day10()
         {
             _rawData = ReadAllText(GetType());
         }

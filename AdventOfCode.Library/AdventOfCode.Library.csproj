@@ -1,18 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Day8\data.txt" />
-    <None Remove="Day7\data.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Day8\data.txt" />
-    <Compile Include="Day7\data.txt" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="Day1\data.txt">
@@ -32,6 +22,18 @@
     </None>
     <None Update="Day6\data.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Day7\data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Day10\data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Day9\data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Day8\data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
