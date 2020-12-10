@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace AdventOfCode.Library.Day8
 {
@@ -15,24 +16,34 @@ namespace AdventOfCode.Library.Day8
 
         public override string SilverStar()
         {
-            var lmc = new Computer();
+            var lmc = new Computer(false);
             lmc.RunProgram(_rawData);
             return $"{lmc.Accumulator}";
         }
 
         public override string GoldStar()
         {
-            throw new System.NotImplementedException();
+            var lmc = new Computer(true);
+            lmc.RunProgram(_rawData);
+            return $"{lmc.Accumulator}";
         }
 
     }
 
     public class Computer
     {
-        private Dictionary<int, Instruction> _programInstructions = new Dictionary<int, Instruction>();
-        private InstructionRegister _ioc = new InstructionRegister();
+        private Dictionary<int, Instruction> _programInstructions;
+        private InstructionRegister _ioc;
+        private bool _nopRecursion;
 
         public int Accumulator { get; set; }
+
+        public Computer(bool fixRecursion)
+        {
+            _programInstructions = new Dictionary<int, Instruction>();
+            _ioc = new InstructionRegister();
+            _nopRecursion = fixRecursion;
+        }
 
         public void RunProgram(IEnumerable<string> programData)
         {
@@ -73,7 +84,13 @@ namespace AdventOfCode.Library.Day8
             }
             catch (Exception)
             {
-                return false;
+                if (!_nopRecursion)
+                {
+                    return false;
+                }
+
+                _ioc.RollBackInstruction();
+                _ioc.CurrentInstruction.OpCode = OPCODES.nop;
             }
 
             switch (_ioc.CurrentInstruction.OpCode)
@@ -110,7 +127,18 @@ namespace AdventOfCode.Library.Day8
             }
         }
 
-        public int InstructionPointer { get; set; }
+        private List<int> _previousInstructionPointers = new List<int>();
+        private int _instructionPointer;
+
+        public int InstructionPointer
+        {
+            get => _instructionPointer;
+            set
+            {
+                _previousInstructionPointers.Add(_instructionPointer);
+                _instructionPointer = value;
+            }
+        }
 
         private void CheckForInfiniteLoop()
         {
@@ -119,11 +147,18 @@ namespace AdventOfCode.Library.Day8
                     .Equals(CurrentInstruction)) > 1)
                 throw new Exception("Recursion detected!");
         }
+
+        public void RollBackInstruction()
+        {
+            var previous = _history.Count - 2;
+            InstructionPointer = _previousInstructionPointers[^2]+1;
+            _currentInstruction = _history[previous];
+        }
     }
 
     public class Instruction
     {
-        public OPCODES OpCode { get; }
+        public OPCODES OpCode { get; set; }
         public int Value { get; }
         
         public Instruction(string rawInstructon)

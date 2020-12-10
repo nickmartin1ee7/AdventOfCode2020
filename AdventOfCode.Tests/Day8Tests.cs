@@ -27,10 +27,11 @@ namespace AdventOfCode.Tests
             Assert.AreEqual(expected, _solution.GoldStar());
         }
 
-        [TestCase(5, "nop +0\r\nacc +1\r\njmp +4\r\nacc +3\r\njmp -3\r\nacc -99\r\nacc +1\r\njmp -4\r\nacc +6")]
-        public void ComputerTest(int expected, string programData)
+        [TestCase(5, false, "nop +0\r\nacc +1\r\njmp +4\r\nacc +3\r\njmp -3\r\nacc -99\r\nacc +1\r\njmp -4\r\nacc +6")]
+        [TestCase(8, true, "nop +0\r\nacc +1\r\njmp +4\r\nacc +3\r\njmp -3\r\nacc -99\r\nacc +1\r\njmp -4\r\nacc +6")]
+        public void ComputerTest(int expected, bool fixRecursion, string programData)
         {
-            var lmc = new Computer();
+            var lmc = new Computer(fixRecursion);
             lmc.RunProgram(programData.Split(Environment.NewLine));
             Assert.AreEqual(expected, lmc.Accumulator);
         }
