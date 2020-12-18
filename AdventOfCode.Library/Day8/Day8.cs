@@ -47,20 +47,23 @@ namespace AdventOfCode.Library.Day8
 
         public void RunProgram(IEnumerable<string> programData)
         {
+            // Populates _programInstructions
             ProcessProgramData(programData);
+
+            // Executes _programInstructions acting on Accumulator
             ExecuteProgramInstructions();
         }
 
         private void ExecuteProgramInstructions()
         {
-            do
+            do // For each instruction
             {
-                if (_programInstructions.TryGetValue(_ioc.InstructionPointer, out Instruction targetInstruction))
+                if (_programInstructions.TryGetValue(_ioc.InstructionPointer, out Instruction targetInstruction))   // Get instruction at InstructionPointer
                 {
-                    if (!ExecuteInstruction(targetInstruction))
-                        break;
+                    if (!ExecuteInstruction(targetInstruction)) // Execute instruction
+                        break;  // If execution ends prematurely
                 }
-                else
+                else // Invalid instruction pointer
                 {
                     throw new AccessViolationException($"Instruction pointer({_ioc.InstructionPointer}) outside program data({_programInstructions.Count})");
                 }
@@ -78,22 +81,30 @@ namespace AdventOfCode.Library.Day8
 
         private bool ExecuteInstruction(Instruction instruction)
         {
+            //if (instruction.Opcode == OPCODES.jmp)
+            //{
+            //    stateBeforeJump = _ioc;
+            //}
+
             try
             {
                 _ioc.CurrentInstruction = instruction;
             }
-            catch (Exception)
+            catch (StackOverflowException)
             {
-                if (!_nopRecursion)
+                if (_nopRecursion)
+                {
+                    instruction.Opcode = OPCODES.nop;
+                    _ioc.CurrentInstruction = instruction;
+                }
+                else
                 {
                     return false;
                 }
-
-                _ioc.RollBackInstruction();
-                _ioc.CurrentInstruction.OpCode = OPCODES.nop;
+                
             }
 
-            switch (_ioc.CurrentInstruction.OpCode)
+            switch (_ioc.CurrentInstruction.Opcode)
             {
                 case OPCODES.nop:
                     // Waste time
@@ -113,7 +124,7 @@ namespace AdventOfCode.Library.Day8
 
     public class InstructionRegister
     {
-        private List<Instruction> _history = new List<Instruction>();
+        private List<Instruction> _historicalInstructions = new List<Instruction>();
         private Instruction _currentInstruction;
 
         public Instruction CurrentInstruction
@@ -121,56 +132,40 @@ namespace AdventOfCode.Library.Day8
             get => _currentInstruction;
             set
             {
-                _history.Add(value);
+                CheckForInfiniteLoop(value);
+                _historicalInstructions.Add(value);
                 _currentInstruction = value;
-                CheckForInfiniteLoop();
             }
         }
 
-        private List<int> _previousInstructionPointers = new List<int>();
-        private int _instructionPointer;
-
-        public int InstructionPointer
+        public int InstructionPointer { get; set; }
+        
+        private void CheckForInfiniteLoop(Instruction futureInstruction)
         {
-            get => _instructionPointer;
-            set
-            {
-                _previousInstructionPointers.Add(_instructionPointer);
-                _instructionPointer = value;
-            }
-        }
-
-        private void CheckForInfiniteLoop()
-        {
-            if (_history
+            var localHistory = _historicalInstructions;
+            localHistory.Add(futureInstruction);
+            if (localHistory
                 .Count(i => i
                     .Equals(CurrentInstruction)) > 1)
-                throw new Exception("Recursion detected!");
-        }
-
-        public void RollBackInstruction()
-        {
-            var previous = _history.Count - 2;
-            InstructionPointer = _previousInstructionPointers[^2]+1;
-            _currentInstruction = _history[previous];
+                throw new StackOverflowException("Recursion detected!");
         }
     }
 
     public class Instruction
     {
-        public OPCODES OpCode { get; set; }
+        public OPCODES Opcode { get; set; }
         public int Value { get; }
         
         public Instruction(string rawInstructon)
         {
             var s = rawInstructon.Split(' ');
-            OpCode = Enum.Parse<OPCODES>(s[0]);
+            Opcode = Enum.Parse<OPCODES>(s[0]);
             Value = int.Parse(s[1]
                 .Replace('+',' '));
         }
 
         public override string ToString() =>
-            $"{OpCode} {Value}";
+            $"{Opcode} {Value}";
     }
 
     public enum OPCODES

@@ -21,6 +21,7 @@ namespace AdventOfCode.Tests
             Assert.AreEqual(expected, _solution.SilverStar());
         }
 
+        // not 754
         [TestCase("")]
         public void GoldStarTest(string expected)
         {
